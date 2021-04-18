@@ -3,3 +3,4 @@ URL:
 use for login application with the laratrust package
 https://dev.to/uzairjan/using-laratrust-permission-and-roles-other-than-users-relation-4e98
 https://easybay.org/2019/06/25/how-to-use-laratrust-in-laravel-acl-updated-2019/
+https://dev.to/aibnuhibban/login-customization-in-laravel-8-2gc8
