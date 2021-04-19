@@ -142,6 +142,7 @@
       <div class="dropdown-header noti-title">
         <h6 class="text-overflow m-0">Welcome!</h6>
       </div>
+      @role(['admin'])
       <a href="#!" class="dropdown-item">
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
@@ -159,6 +160,26 @@
         <i class="ni ni-user-run"></i>
         <span>Logout</span>
       </a>
+      @endrole
+
+      <a href="#!" class="dropdown-item">
+        <i class="ni ni-single-02"></i>
+        <span>My profile</span>
+      </a>
+      <a href="#!" class="dropdown-item">
+        <i class="ni ni-settings-gear-65"></i>
+        <span>Change Password</span>
+      </a>
+      <a href="#!" class="dropdown-item">
+        <i class="ni ni-calendar-grid-58"></i>
+        <span>Activity</span>
+      </a>
+      <div class="dropdown-divider"></div>
+      <a href="{{ route('staff.logout')}}" class="dropdown-item">
+        <i class="ni ni-user-run"></i>
+        <span>Logout</span>
+      </a>
+
     </div>
   </li>
 </ul>

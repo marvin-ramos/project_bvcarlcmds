@@ -25,6 +25,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //for login page area
 Route::get('/login-page', [LoginController::class, 'index']);
+Route::post('/login/action', [LoginController::class, 'login_action'])
+->name('login.action');
 
 //Administration area is here
 Route::prefix('admin')->group(function () {
@@ -45,4 +47,12 @@ Route::prefix('admin')->group(function () {
     //employee functionality
     Route::post('/employee/add/store', [AdminController::class, 'employee_store'])
     ->name('employee.store');
+});
+
+//For staff area only
+Route::prefix('staff')->group(function () {
+
+    //for dashboard area 
+    Route::get('/logout', [StaffController::class, 'logout'])
+    ->name('staff.logout');
 });
