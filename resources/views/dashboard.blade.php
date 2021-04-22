@@ -420,4 +420,15 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+<script>
+  @if(session('success'))
+    swal({
+      title: '{{ session('alertTitle') }}',
+      text:  '{{ session('success') }}',
+      icon:  '{{ session('alertIcon') }}',
+      button: "OK",
+    });
+  @endif
+</script>
 @endsection

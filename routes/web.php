@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,19 +22,21 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //for login page area
-Route::get('/login-page', [LoginController::class, 'index']);
+Route::get('/login-page', [LoginController::class, 'index'])
+->name('view.login');
 Route::post('/login/action', [LoginController::class, 'login_action'])
 ->name('login.action');
 
-//Administration area is here
-Route::prefix('admin')->group(function () {
+//dashboard page
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware('check_users_login');
+// ->name('main.dashboard');
 
-	//for dashboard area 
-    Route::get('/dashboard', [AdminController::class, 'index']);
-
+//for administrator route
+Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], function()
+{
     //for employee front end
     Route::get('/employee/table', [AdminController::class, 'employee_table'])
     ->name('employee.table');
@@ -47,11 +50,14 @@ Route::prefix('admin')->group(function () {
     //employee functionality
     Route::post('/employee/add/store', [AdminController::class, 'employee_store'])
     ->name('employee.store');
+
+    Route::get('/logout', [StaffController::class, 'logout'])
+    ->name('admin.logout');
 });
 
-//For staff area only
-Route::prefix('staff')->group(function () {
-
+//for staff route
+Route::group(['prefix' => 'staff',  'middleware' => 'check_users_login'], function()
+{
     //for dashboard area 
     Route::get('/logout', [StaffController::class, 'logout'])
     ->name('staff.logout');

@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" type="text/css">
 
   <!-- Page plugins -->
-
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendor/pikadays/css/pikaday.css')}}">
   <!-- Argon CSS -->
   <link rel="stylesheet" href="{{ asset('assets/css/argon.css?v=1.2.0') }}" type="text/css">
 </head>
@@ -58,6 +58,7 @@
 
   <!-- Argon JS -->
   <script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
+  <script src="{{ asset('assets/vendor/pikadays/pikaday.js') }}"></script>
 
   @yield('scripts')
   

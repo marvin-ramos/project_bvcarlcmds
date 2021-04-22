@@ -51,26 +51,42 @@
           </div>
         </div>
         <div class="card-body">
-          <form>
+          <form method="post" action="{{ route('employee.store') }}">
+            @csrf
             <h6 class="heading-small text-muted mb-4">User information</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">First name</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="firstname">First name</label>
+                    <input type="text" id="firstname" name="firstname" class="form-control  @error('firstname') is-invalid @enderror" value="{{ old('firstname') }}">
+                    @error('firstname')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Last name</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="lastname">Last name</label>
+                    <input type="text" id="lastname" name="lastname" class="form-control  @error('lastname') is-invalid @enderror" value="{{ old('lastname') }}">
+                    @error('lastname')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">M.I.:</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="middlename">M.I.:</label>
+                    <input type="text" id="middlename" name="middlename" class="form-control  @error('middlename') is-invalid @enderror" value="{{ old('middlename') }}">
+                    @error('middlename')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
               </div>
@@ -79,20 +95,35 @@
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Gender</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="gender">Gender</label>
+                    <select class="form-control @error('gender_id') is-invalid @enderror" name="gender_id" id="gender_id">
+                      <option  value="" disabled selected>Select Gender</option>
+                      @foreach($genderData as $gender)
+                      <option value="{{ $gender->id }}">{{ $gender->gender }}</option>
+                      @endforeach
+                    </select>
+                    @error('gender_id')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Birthday</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="birth_date">Birthday</label>
+                    <input type="text" id="birth_date" class="form-control @error('birth_date') is-invalid @enderror" placeholder="MM/DD/YYYY" name="birthday" value="{{ old('birth_date') }}">
+                    @error('birthday')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Age</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="age">Age</label>
+                    <input type="text" id="age" class="form-control" name="age">
                   </div>
                 </div>
               </div>
@@ -101,14 +132,29 @@
               <div class="row">
                 <div class="col-lg-7">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Contact Number</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="contact_number">Contact Number</label>
+                    <input type="text" id="contact_number" name="contact_number" class="form-control  @error('contact_number') is-invalid @enderror" value="{{ old('contact_number') }}">
+                    @error('contact_number')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Status</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for=status_id>Status</label>
+                    <select class="form-control @error('status_id') is-invalid @enderror" name="status_id" id="status_id">
+                      <option  value="" disabled selected>Select Civil Status</option>
+                      @foreach($statusData as $status)
+                        <option value="{{ $status->id }}">{{ $status->status }}</option>
+                      @endforeach
+                    </select>
+                      @error('status_id')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
               </div>
@@ -120,8 +166,13 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-address">Address</label>
-                    <textarea id="input-address" class="form-control" rows="4" cols="50">Address</textarea>
+                    <label class="form-control-label" for="address">Address</label>
+                    <textarea id="address" class="form-control @error('address') is-invalid @enderror" rows="4" cols="50" name="address">{{ old('address') }}</textarea>
+                    @error('address')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
               </div>
@@ -133,12 +184,17 @@
               <div class="row">
                 <div class="col-md-9">
                   <div class="form-group">
-					<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
+                    <input type="file" id="profile" name="profile" class="form-control @error('profile') is-invalid @enderror">
+                    @error('profile')
+                      <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                      </span>
+                    @enderror
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <button class="btn btn-success">Register</button>
+                    <button type="submit" class="btn btn-success">Register</button>
                   </div>
                 </div>
                 <div class="col">
@@ -161,4 +217,23 @@
 
 </div>
 </div>
+@endsection
+@section('scripts')
+  <script>
+  function calculateAge(date) 
+  {
+    const now = new Date();
+    const diff = Math.abs(now - date );
+    const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365)); 
+    return age
+  }
+  var picker = new Pikaday({ 
+    field: document.getElementById('birth_date') ,
+    yearRange:[1900,2020],
+    onSelect: function(date) {
+    let age = calculateAge(date);
+    document.getElementById('age').value = age ;
+    }                        
+  });
+  </script>
 @endsection

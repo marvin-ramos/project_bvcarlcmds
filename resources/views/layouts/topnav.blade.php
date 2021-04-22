@@ -156,12 +156,12 @@
         <span>Activity</span>
       </a>
       <div class="dropdown-divider"></div>
-      <a href="#!" class="dropdown-item">
+      <a href="{{ route('admin.logout') }}" class="dropdown-item">
         <i class="ni ni-user-run"></i>
         <span>Logout</span>
       </a>
       @endrole
-
+      @role(['staff'])
       <a href="#!" class="dropdown-item">
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
@@ -179,7 +179,7 @@
         <i class="ni ni-user-run"></i>
         <span>Logout</span>
       </a>
-
+      @endrole
     </div>
   </li>
 </ul>
