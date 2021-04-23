@@ -31,8 +31,8 @@ Route::post('/login/action', [LoginController::class, 'login_action'])
 ->name('login.action');
 
 //dashboard page
-Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware('check_users_login');
-// ->name('main.dashboard');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware('check_users_login')
+->name('main.dashboard');
 
 //for administrator route
 Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], function()
@@ -42,16 +42,18 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
     ->name('employee.table');
     Route::get('/employee/add', [AdminController::class, 'employee_add'])
     ->name('employee.add');
-    Route::get('/employee/edit', [AdminController::class, 'employee_edit'])
+    Route::get('/employee/edit/{id}', [AdminController::class, 'employee_edit'])
     ->name('employee.edit');
-    Route::get('/employee/view', [AdminController::class, 'employee_view'])
+    Route::get('/employee/view/{id}', [AdminController::class, 'employee_view'])
     ->name('employee.view');
 
     //employee functionality
     Route::post('/employee/add/store', [AdminController::class, 'employee_store'])
     ->name('employee.store');
+    Route::get('/employee/delete/{id}', [AdminController::class, 'employee_delete'])
+    ->name('employee.delete');
 
-    Route::get('/logout', [StaffController::class, 'logout'])
+    Route::get('/logout', [AdminController::class, 'logout'])
     ->name('admin.logout');
 });
 

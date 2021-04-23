@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 //for model only
 use App\Models\History;
@@ -11,20 +12,25 @@ use App\Models\Gender;
 use App\Models\Status;
 
 use Carbon\Carbon;
+use Session;
+use File;
 
 class AdminController extends Controller
 {
 
 	public function employee_table() {
-		return view('employee.table');
-	}
+		$employees = Employee::latest()->paginate(15);
 
+        return view('employee.table', compact('employees'))
+            ->with('i', (request()->input('page', 1) - 1) * 15);
+	}
 	public function employee_add() {
 		$genderData = Gender::select('id','gender')->get();
 	    $statusData = Status::select('id','status')->get();
 	    return view('employee.add', compact('genderData','statusData'));
 	}
 	public function employee_store(Request $request) {
+
 		$request->validate([
 	        'firstname'         => 'required|min:3|max:20|alpha',
 	        'middlename'        => 'required|alpha',
@@ -36,7 +42,7 @@ class AdminController extends Controller
 	        'address'           => 'required',
 	        'profile'           => 'required',
 	    ]);
-		dd($request);
+
 	    $employee = Employee::where([
             ['firstname', '=', $request->get('firstname')],
             ['middlename', '=', $request->get('middlename')],
@@ -76,7 +82,7 @@ class AdminController extends Controller
 	      $id = auth()->user()->id;
 	      $remark = 'has added '. $firstname .' '. $middlename .' '. $lastname.' to the system';
 
-	      $records = Log::create([
+	      $records = History::create([
 	          'user_id' => $id,
 	          'remarks' => $remark,
 	          'created_at' => Carbon::now()
@@ -86,7 +92,7 @@ class AdminController extends Controller
 	      Session::flash('alertIcon', 'success');
 
 	      return Redirect()
-	             ->route('table.employee')
+	             ->route('employee.table')
 	             ->with('success','Greate! Employee created successfully.');
 	    } else {
 
@@ -98,15 +104,55 @@ class AdminController extends Controller
 	             ->with('success', 'Opps Employee Already Exist');
 	    }
 	}
+	public function employee_edit($id) {
+		$genderData = Gender::select('id','gender')->get();
+	    $statusData = Status::select('id','status')->get();
+	    $employeeData = Employee::find($id)
+               ->join('genders', 'genders.id', '=', 'employees.gender_id')
+               ->join('statuses', 'statuses.id', '=', 'employees.status_id')
+               ->select('employees.id','employees.firstname','employees.middlename','employees.lastname','genders.gender','employees.gender_id','employees.age','employees.birthday','employees.contact_number','statuses.status','employees.status_id','employees.address','employees.profile')
+               ->where('employees.id', '=', $id)
+               ->first();
+	    return view('employee.update', compact('genderData','statusData','employeeData'));
+	}
+	public function employee_view($id) {
+		$genderData = Gender::select('id','gender')->get();
+	    $statusData = Status::select('id','status')->get();
+	    $employeeData = Employee::find($id)
+               ->join('genders', 'genders.id', '=', 'employees.gender_id')
+               ->join('statuses', 'statuses.id', '=', 'employees.status_id')
+               ->select('employees.id','employees.firstname','employees.middlename','employees.lastname','genders.gender','employees.gender_id','employees.age','employees.birthday','employees.contact_number','statuses.status','employees.status_id','employees.address','employees.profile')
+               ->where('employees.id', '=', $id)
+               ->first();
+	    return view('employee.view', compact('genderData','statusData','employeeData'));
+	}
+	public function employee_delete($id) {
+		$remark = 'has deleted an account in the system at';
+	    $user_id = auth()->user()->id;
 
-		public function employee_edit() {
-			return view('employee.update');
-		}
+	    $records = History::create([
+	        'user_id' => $user_id,
+	        'remarks' => $remark,
+	        'created_at' => Carbon::now()
+	    ]);
 
-		public function employee_view() {
-			return view('employee.view');
-		}
+	    $data = Employee::find($id)
+	            ->where('id', $id)
+	            ->firstorfail();
+	    
+	    $image = $data->profile;
+	    
+	    File::delete($image);
 
+	    $deleteRecords = Employee::where('id', $id)->delete();
+
+	    Session::flash('alertTitle', 'Success');
+	    Session::flash('alertIcon', 'success');
+
+	    return Redirect()
+	        ->route('employee.table')
+	        ->with('success','Greate! Employee deleted successfully.');
+	}
 	public function logout(Request $request) {
 		$remark = 'has Logged In to the system at';
 		$id = auth()->user()->id;

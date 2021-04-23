@@ -17,6 +17,7 @@
   </div>
 </div>
 </nav>
+
 <!-- Main content -->
 <div class="main-content" id="panel">
 <!-- Topnav -->
@@ -45,31 +46,32 @@
         <div class="card-header">
           <div class="row align-items-center">
             <div class="col-8">
-              <h3 class="mb-0">View Employee</h3>
+              <h3 class="mb-0">Add Employee</h3>
             </div>
           </div>
         </div>
         <div class="card-body">
-          <form>
+          <form method="POST" action="{{ route('employee.store') }}">
+            @csrf
             <h6 class="heading-small text-muted mb-4">User information</h6>
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">First name</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="firstname">First name</label>
+                    <input type="text" id="firstname" name="firstname" class="form-control" value="{{ $employeeData->firstname }}">
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Last name</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="lastname">Last name</label>
+                    <input type="text" id="lastname" name="lastname" class="form-control" value="{{ $employeeData->lastname }}">
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">M.I.:</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="middlename">M.I.:</label>
+                    <input type="text" id="middlename" name="middlename" class="form-control" value="{{ $employeeData->middlename }}">
                   </div>
                 </div>
               </div>
@@ -78,20 +80,22 @@
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Gender</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="gender">Gender</label>
+                    <select class="form-control @error('gender_id') is-invalid @enderror" name="gender_id" id="gender_id">
+                      <option  value="" disabled selected>{{ $employeeData->gender }}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Birthday</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="birth_date">Birthday</label>
+                    <input type="text" class="form-control" name="birthday" value="{{ $employeeData->birthday }}">
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Age</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="age">Age</label>
+                    <input type="text" id="age" class="form-control" value="{{ $employeeData->age }}">
                   </div>
                 </div>
               </div>
@@ -100,14 +104,16 @@
               <div class="row">
                 <div class="col-lg-7">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Contact Number</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="contact_number">Contact Number</label>
+                    <input type="text" id="contact_number" name="contact_number" class="form-control" value="{{ $employeeData->contact_number }}">
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Status</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for=status_id>Status</label>
+                    <select class="form-control" name="status_id" id="status_id">
+                      <option  value="" disabled selected>{{ $employeeData->status }}</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -119,25 +125,40 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-address">Address</label>
-                    <textarea id="input-address" class="form-control" rows="4" cols="50">Address</textarea>
+                    <label class="form-control-label" for="address">Address</label>
+                    <textarea id="address" class="form-control" rows="4" cols="50">{{ $employeeData->address }}</textarea>
                   </div>
                 </div>
               </div>
             </div>
 
             <hr class="my-4" />
-            <h6 class="heading-small text-muted mb-4">Employee Profile</h6>
+            <h6 class="heading-small text-muted mb-4"></h6>
             <div class="pl-lg-4">
               <div class="row">
-                <div class="col-md-10">
-                  <div class="form-group">
-					          <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
-                  </div>
+                <div class="col-md-9">
+                </div>
+                <div class="col">
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <a href="{{ route('employee.table') }}" class="btn btn-danger">Cancel</a>
+                    <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+                    <a onclick="return confirmation()" class="btn btn-danger" style="color: #fff;">Cancel</a>
+                      <script>
+                        function confirmation() {
+                          swal({
+                            title: "Alert",
+                            text: "Are you sure you want to go back ??",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then(okay => {
+                            if(okay) {
+                              window.location.href = "{{ route('employee.table') }}";
+                            }
+                          });
+                        }
+                      </script>
                   </div>
                 </div>
               </div>
@@ -148,10 +169,10 @@
     </div>
   </div>
 
-  	<!-- Footer -->
-	<footer class="footer pt-0 bg-default">
-	  @include('layouts.footer')
-	</footer>
+    <!-- Footer -->
+  <footer class="footer pt-0 bg-default">
+    @include('layouts.footer')
+  </footer>
 
 </div>
 </div>

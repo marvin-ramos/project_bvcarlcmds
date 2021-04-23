@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form method="post" action="{{ route('employee.store') }}">
+          <form method="POST" action="{{ route('employee.store') }}">
             @csrf
             <h6 class="heading-small text-muted mb-4">User information</h6>
             <div class="pl-lg-4">
@@ -199,7 +199,23 @@
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <a href="{{ route('employee.table') }}" class="btn btn-danger">Cancel</a>
+                    <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+                    <a onclick="return confirmation()" class="btn btn-danger">Cancel</a>
+                      <script>
+                        function confirmation() {
+                          swal({
+                            title: "Alert",
+                            text: "Are you sure you want to go back ??",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then(okay => {
+                            if(okay) {
+                              window.location.href = "{{ route('employee.table') }}";
+                            }
+                          });
+                        }
+                      </script>
                   </div>
                 </div>
               </div>
@@ -220,20 +236,20 @@
 @endsection
 @section('scripts')
   <script>
-  function calculateAge(date) 
-  {
-    const now = new Date();
-    const diff = Math.abs(now - date );
-    const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365)); 
-    return age
-  }
-  var picker = new Pikaday({ 
-    field: document.getElementById('birth_date') ,
-    yearRange:[1900,2020],
-    onSelect: function(date) {
-    let age = calculateAge(date);
-    document.getElementById('age').value = age ;
-    }                        
-  });
+    function calculateAge(date) 
+    {
+      const now = new Date();
+      const diff = Math.abs(now - date );
+      const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365)); 
+      return age
+    }
+    var picker = new Pikaday({ 
+      field: document.getElementById('birth_date') ,
+      yearRange:[1900,2020],
+      onSelect: function(date) {
+      let age = calculateAge(date);
+      document.getElementById('age').value = age ;
+      }                        
+    });
   </script>
 @endsection

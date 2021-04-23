@@ -62,67 +62,56 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort" data-sort="name">Picture</th>
-                <th scope="col" class="sort" data-sort="budget">Name</th>
-                <th scope="col" class="sort" data-sort="status">Status</th>
-                <th scope="col">Address</th>
+                <th scope="col" class="sort" data-sort="id">ID</th>
+                <th scope="col" class="sort" data-sort="profile">Picture</th>
+                <th scope="col" class="sort" data-sort="name">Name</th>
+                <th scope="col" class="sort" data-sort="address">Address</th>
+                <th scope="col" class="sort" data-sort="created">Created At</th>
                 <th scope="col" class="sort" data-sort="completion">Action</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody class="list">
-              <tr>
-                <th scope="row">
-                  <div class="media align-items-center">
-                    <a href="#" class="avatar rounded-circle mr-3">
-                      <img alt="Image placeholder" src="../assets/img/theme/bootstrap.jpg">
-                    </a>
-                  </div>
-                </th>
-                <td class="budget">
-                  Marvin M. Ramos
-                </td>
-                <td>
-                  Gender
-                </td>
-                <td>
-                  Lorem Ipsum has been the industry's standard.
-                </td>
-                <td style="width: 100%;">
-                	<a href="{{ route('employee.edit') }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
-                	<a href="{{ route('employee.view') }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
-                	<a href="" class="btn btn-danger btn-sm" style="width: 30%;">Erase</a>
-                </td>
-              </tr>
+              @foreach ($employees as $employee)
+                <tr>
+                    <td class="id">{{ ++$i }}</td>
+                    <th scope="row" class="profile">
+                      <div class="media align-items-center">
+                        <a href="#" class="avatar rounded-circle mr-3">
+                          <img alt="Profile" src="{{ URL::to($employee->profile) }}">
+                        </a>
+                      </div>
+                    </th>
+                    <td class="name">{{ $employee->firstname }} {{ $employee->middlename }} {{ $employee->lastname }}</td>
+                    <td class="address">{{ $employee->address }}</td>
+                    <td class="created">{{ $employee->created_at }}</td>
+                    <td style="width: 100%;">
+                      <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
+                      <a href="{{ route('employee.view', $employee->id) }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
+                      <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+                      <a class="btn btn-danger btn-sm" onclick="return confirmationDeleteEmployee();" style="width: 30%;">Erase</a>
+                      <script type="text/javascript">
+                        function confirmationDeleteEmployee() {
+                          swal({
+                            title: "Alert",
+                            text: "Are you sure you want to Delete the records?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                          }).then(okay => {
+                            if(okay) {
+                              window.location.href = "{{ route('employee.delete', $employee->id) }}";
+                            }
+                          });
+                        }
+                      </script>
+                    </td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
-        </div>
 
-        <!-- Card footer -->
-        <div class="card-footer py-4">
-          <nav aria-label="...">
-            <ul class="pagination justify-content-end mb-0">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">
-                  <i class="fas fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  <i class="fas fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          {!! $employees->links() !!}
         </div>
       </div>
     </div>
@@ -135,4 +124,19 @@
 
 </div>
 </div>
+@endsection
+
+
+@section('scripts')
+<script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+<script>
+  @if(session('success'))
+    swal({
+      title: '{{ session('alertTitle') }}',
+      text:  '{{ session('success') }}',
+      icon:  '{{ session('alertIcon') }}',
+      button: "OK",
+    });
+  @endif
+</script>
 @endsection
