@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form method="POST" action="{{ route('employee.store') }}">
+          <form method="POST" action="{{ route('employee.update', $employeeData->id) }}" enctype="multipart/form-data">
             @csrf
             <h6 class="heading-small text-muted mb-4">User information</h6>
             <div class="pl-lg-4">
@@ -233,7 +233,7 @@
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <button type="submit" class="btn btn-success">Register</button>
+                    <button type="submit" class="btn btn-success">Update</button>
                   </div>
                 </div>
                 <div class="col">

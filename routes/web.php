@@ -26,7 +26,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //for login page area
 Route::get('/login-page', [LoginController::class, 'index'])
-->name('view.login');
+       ->name('view.login');
 Route::post('/login/action', [LoginController::class, 'login_action'])
 ->name('login.action');
 
@@ -50,8 +50,14 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
     //employee functionality
     Route::post('/employee/add/store', [AdminController::class, 'employee_store'])
     ->name('employee.store');
+    Route::post('/employee/edit/update/{id}', [AdminController::class, 'employee_update'])
+    ->name('employee.update');
     Route::get('/employee/delete/{id}', [AdminController::class, 'employee_delete'])
     ->name('employee.delete');
+
+    //account front-end
+    Route::get('/account/add/{id}', [AdminController::class, 'account_add'])
+    ->name('account.add');
 
     Route::get('/logout', [AdminController::class, 'logout'])
     ->name('admin.logout');

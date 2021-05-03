@@ -66,8 +66,8 @@
                 <th scope="col" class="sort" data-sort="profile">Picture</th>
                 <th scope="col" class="sort" data-sort="name">Name</th>
                 <th scope="col" class="sort" data-sort="address">Address</th>
-                <th scope="col" class="sort" data-sort="created">Created At</th>
                 <th scope="col" class="sort" data-sort="completion">Action</th>
+                <th scope="col" class="sort" data-sort="account">Account</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -78,18 +78,17 @@
                     <th scope="row" class="profile">
                       <div class="media align-items-center">
                         <a href="#" class="avatar rounded-circle mr-3">
-                          <img alt="Profile" src="{{ URL::to($employee->profile) }}">
+                          <img alt="Profile" src="{{ URL::to($employee->profile) }}" style="width: 50px; height: 50px;">
                         </a>
                       </div>
                     </th>
                     <td class="name">{{ $employee->firstname }} {{ $employee->middlename }} {{ $employee->lastname }}</td>
                     <td class="address">{{ $employee->address }}</td>
-                    <td class="created">{{ $employee->created_at }}</td>
-                    <td style="width: 100%;">
+                    <td class="completion">
                       <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
                       <a href="{{ route('employee.view', $employee->id) }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
                       <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
-                      <a class="btn btn-danger btn-sm" onclick="return confirmationDeleteEmployee();" style="width: 30%;">Erase</a>
+                      <a class="btn btn-danger btn-sm" onclick="return confirmationDeleteEmployee();" style="width: 30%;color: #fff;">Erase</a>
                       <script type="text/javascript">
                         function confirmationDeleteEmployee() {
                           swal({
@@ -105,6 +104,9 @@
                           });
                         }
                       </script>
+                    </td>
+                    <td class="account">
+                      <a href="{{ route('account.add', $employee->id) }}" class="btn btn-success btn-sm" style="width: 100%;">Add</a>
                     </td>
                 </tr>
               @endforeach

@@ -55,16 +55,36 @@
             <h6 class="heading-small text-muted mb-4">User Account information</h6>
             <div class="pl-lg-4">
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-3">
+                 <label class="form-control-label" for=status_id>Status</label>
+                  <select class="form-control @error('status_id') is-invalid @enderror" name="status_id" id="status_id">
+                    <option  value="" disabled selected>Select Civil Status</option>
+                    @foreach($statusData as $status)
+                      <option value="{{ $status->id }}">{{ $status->status }}</option>
+                    @endforeach
+                  </select>
+                  @error('status_id')
+                    <span class="invalid-feedback" role="alert">
+                      <strong>{{ $message }}</strong>
+                    </span>
+                  @enderror
+                </div>
+                <div class="col-lg-3">
                   <div class="form-group">
                     <label class="form-control-label" for="input-email">Email address</label>
-                    <input type="email" id="input-email" class="form-control" placeholder="jesse@example.com">
+                    <input type="email" id="input-email" class="form-control" placeholder="sample@example.com">
                   </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-3">
                   <div class="form-group">
                     <label class="form-control-label" for="input-password">Password</label>
-                    <input type="password" id="input-password" class="form-control" placeholder="Username">
+                    <input type="password" id="input-password" class="form-control" placeholder="Password">
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-password">Confirm Password</label>
+                    <input type="password" id="input-password" class="form-control" placeholder="Password">
                   </div>
                 </div>
               </div>
@@ -75,19 +95,19 @@
                 <div class="col-lg-5">
                   <div class="form-group">
                     <label class="form-control-label" for="input-first-name">First name</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <input type="text" id="input-first-name" class="form-control" value="{{ $employeeData->firstname }}">
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">Last name</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <input type="text" id="input-last-name" class="form-control" value="{{ $employeeData->lastname }}">
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">M.I.:</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <input type="text" id="input-last-name" class="form-control" value="{{ $employeeData->middlename }}">
                   </div>
                 </div>
               </div>
@@ -96,20 +116,22 @@
               <div class="row">
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-first-name">Gender</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <label class="form-control-label" for="gender_id">Gender</label>
+                    <select class="form-control" name="gender_id" id="gender_id">
+                      <option  value="{{ $employeeData->gender_id }}">{{ $employeeData->gender }}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">Birthday</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <input type="text" id="input-last-name" class="form-control" value="{{ $employeeData->birthday }}">
                   </div>
                 </div>
                 <div class="col-lg-2">
                   <div class="form-group">
                     <label class="form-control-label" for="input-last-name">Age</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <input type="text" id="input-last-name" class="form-control" value="{{ $employeeData->age }}">
                   </div>
                 </div>
               </div>
@@ -119,13 +141,15 @@
                 <div class="col-lg-7">
                   <div class="form-group">
                     <label class="form-control-label" for="input-first-name">Contact Number</label>
-                    <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                    <input type="text" id="input-first-name" class="form-control"value="{{ $employeeData->contact_number }}">
                   </div>
                 </div>
                 <div class="col-lg-5">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name">Status</label>
-                    <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                    <label class="form-control-label" for="status_id">Status</label>
+                    <select class="form-control" name="status_id" id="status_id">
+                      <option  value="{{ $employeeData->status_id }}">{{ $employeeData->status }}</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -138,7 +162,7 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label class="form-control-label" for="input-address">Address</label>
-                    <textarea id="input-address" class="form-control" rows="4" cols="50">Address</textarea>
+                    <textarea id="input-address" class="form-control" rows="4" cols="50">{{ $employeeData->address }}</textarea>
                   </div>
                 </div>
               </div>
@@ -149,9 +173,6 @@
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-md-9">
-                  <div class="form-group">
-					<input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
-                  </div>
                 </div>
                 <div class="col">
                   <div class="form-group">

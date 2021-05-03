@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="card-body">
-          <form method="POST" action="{{ route('employee.store') }}">
+          <form method="POST" action="{{ route('employee.store') }}" enctype="multipart/form-data">
             @csrf
             <h6 class="heading-small text-muted mb-4">User information</h6>
             <div class="pl-lg-4">
@@ -182,7 +182,7 @@
             <h6 class="heading-small text-muted mb-4">Employee Profile</h6>
             <div class="pl-lg-4">
               <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-8">
                   <div class="form-group">
                     <input type="file" id="profile" name="profile" class="form-control @error('profile') is-invalid @enderror">
                     @error('profile')
@@ -194,13 +194,13 @@
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <button type="submit" class="btn btn-success">Register</button>
+                    <button type="submit" class="btn btn-success" style="width: 100%;">Register</button>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
-                    <a onclick="return confirmation()" class="btn btn-danger">Cancel</a>
+                    <a onclick="return confirmation()" class="btn btn-danger" style="width: 100%;color: #fff;">Cancel</a>
                       <script>
                         function confirmation() {
                           swal({
