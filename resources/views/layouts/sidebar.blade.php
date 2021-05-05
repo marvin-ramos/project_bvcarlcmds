@@ -15,13 +15,13 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="map.html">
+      <a class="nav-link" href="{{ route('account.table') }}">
         <i class="ni ni-pin-3 text-primary"></i>
         <span class="nav-link-text">Account</span>
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="profile.html">
+      <a class="nav-link" href="{{ route('history.table') }}">
         <i class="ni ni-single-02 text-yellow"></i>
         <span class="nav-link-text">History</span>
       </a>

@@ -39,28 +39,39 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
 {
     //for employee front end
     Route::get('/employee/table', [AdminController::class, 'employee_table'])
-    ->name('employee.table');
+         ->name('employee.table');
     Route::get('/employee/add', [AdminController::class, 'employee_add'])
-    ->name('employee.add');
+         ->name('employee.add');
     Route::get('/employee/edit/{id}', [AdminController::class, 'employee_edit'])
-    ->name('employee.edit');
+         ->name('employee.edit');
     Route::get('/employee/view/{id}', [AdminController::class, 'employee_view'])
-    ->name('employee.view');
+         ->name('employee.view');
 
     //employee functionality
     Route::post('/employee/add/store', [AdminController::class, 'employee_store'])
-    ->name('employee.store');
+         ->name('employee.store');
     Route::post('/employee/edit/update/{id}', [AdminController::class, 'employee_update'])
-    ->name('employee.update');
+         ->name('employee.update');
     Route::get('/employee/delete/{id}', [AdminController::class, 'employee_delete'])
-    ->name('employee.delete');
+         ->name('employee.delete');
 
     //account front-end
     Route::get('/account/add/{id}', [AdminController::class, 'account_add'])
-    ->name('account.add');
+         ->name('account.add');
+    Route::get('/account/table', [AdminController::class, 'account_table'])
+         ->name('account.table');
+    Route::get('/account/view/{id}', [AdminController::class, 'account_view'])
+         ->name('account.view');
+
+    //for history area
+    Route::get('/table/history', [AdminController::class, 'history_table'])
+         ->name('history.table');
+
+    //account functionality
+    Route::post('/account/add/store', [AdminController::class, 'account_store']);
 
     Route::get('/logout', [AdminController::class, 'logout'])
-    ->name('admin.logout');
+         ->name('admin.logout');
 });
 
 //for staff route
@@ -68,5 +79,5 @@ Route::group(['prefix' => 'staff',  'middleware' => 'check_users_login'], functi
 {
     //for dashboard area 
     Route::get('/logout', [StaffController::class, 'logout'])
-    ->name('staff.logout');
+         ->name('staff.logout');
 });

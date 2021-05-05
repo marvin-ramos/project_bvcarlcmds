@@ -10,15 +10,38 @@ use App\Models\History;
 use App\Models\Employee;
 use App\Models\Gender;
 use App\Models\Status;
+use App\Models\Role;
+use App\Models\User;
 
 use Carbon\Carbon;
 use Session;
 use File;
+use Hash;
 
 class AdminController extends Controller
-{
+{	
+	//for history table
+	public function history_table() {
+		$historyData = History::join('users', 'users.id', '=', 'histories.user_id')
+                  ->join('employees', 'employees.id', '=', 'users.employee_id')
+                  ->select('employees.firstname','employees.middlename','employees.lastname','employees.profile','histories.remarks','histories.created_at')
+                  ->get();
+
+    	return view('history', compact('historyData'))
+    		 ->with('i', (request()->input('page', 1) - 1) * 15);
+	}
 	//for account employee area
+	public function account_table() {
+		$accountData = User::join('employees', 'employees.id', '=', 'users.employee_id')
+                  ->join('genders', 'genders.id', '=', 'employees.gender_id')
+                  ->join('statuses', 'statuses.id', '=', 'employees.status_id')
+                  ->select('users.id','employees.firstname','employees.middlename','employees.lastname','genders.gender','employees.age','employees.birthday','employees.contact_number','statuses.status','employees.address','employees.profile', 'users.email', 'users.password','users.role_name')
+                  ->get();
+    	return view('account.table_account', compact('accountData'))
+    		 ->with('i', (request()->input('page', 1) - 1) * 15);
+	}
 	public function account_add($id) {
+		$roleData = Role::select('id','display_name')->get();
 		$genderData = Gender::select('id','gender')->get();
 	    $statusData = Status::select('id','status')->get();
 	    $employeeData = Employee::find($id)
@@ -27,7 +50,79 @@ class AdminController extends Controller
                ->select('employees.id','employees.firstname','employees.middlename','employees.lastname','genders.gender','employees.gender_id','employees.age','employees.birthday','employees.contact_number','statuses.status','employees.status_id','employees.address','employees.profile')
                ->where('employees.id', '=', $id)
                ->first();
-	    return view('account.add_account', compact('genderData','statusData','employeeData'));
+	    return view('account.add_account', compact('genderData','statusData','employeeData','roleData'));
+	}
+	public function account_store(Request $request) {
+		$request->validate([      
+	        'employee_id'           => 'required',
+	        'role'					=> 'required',
+	        'email'                 => 'required|string|email|max:255|unique:users',
+	        'password'              => 'required|string|min:8|confirmed',
+	        'password_confirmation' => 'required',
+	    ]);
+
+	    $employee_account = User::where([
+            ['employee_id', '=', $request->get('employee_id')], 
+            ])->first();
+
+	    if ($employee_account == null ) {
+
+			$user =  User::create([
+		        'employee_id' => $request['employee_id'],
+		        'email' 	  => $request['email'],
+		        'password' 	  => Hash::make($request['password']),
+		        'role_name'   => $request['role_name'],
+		    ]);
+
+		    $role_value = $user->role_name;
+		    $id = 0;
+
+		    if($role_value == 'Administrator') 
+		        $userRole = DB::table('roles')
+		    			  ->where('name', '=', 'Administrator')
+		    			  ->pluck('id');
+
+		    if($role_value == 'Staff') 
+		        $userRole = DB::table('roles')
+		    			  ->where('name', '=', 'Staff')
+		    			  ->pluck('id');
+
+		    $user->roles()->attach($userRole);
+		    return $user;
+
+			$email = $request->email; 
+			$userid = auth()->user()->id;
+			$remark = 'has created '. $email .' account to the system';
+
+			$records = History::create([
+				'user_id' => $userid,
+				'remarks' => $remark,
+				'created_at' => Carbon::now()
+			]);
+
+			Session::flash('alertTitle', 'Success');
+			Session::flash('alertIcon', 'success');
+
+			return redirect()
+				 ->route('table.account')
+				 ->with('success', 'Account has created Successfully');
+
+	    } else {
+			Session::flash('alertTitle', 'Opps');
+			Session::flash('alertIcon', 'warning');
+
+			return back()
+			     ->with('success', 'Employee has Already have an account');
+	    }
+	}
+	public function account_view($id) {
+	    $employeeData = User::find($id)
+               ->join('employees', 'employees.id', '=', 'users.employee_id')
+               ->join('genders', 'genders.id', '=', 'employees.gender_id')
+               ->join('statuses', 'statuses.id', '=', 'employees.status_id')
+               ->select('employees.firstname','employees.middlename','employees.lastname','genders.gender','employees.gender_id','employees.age','employees.birthday','employees.contact_number','statuses.status','employees.status_id','employees.address','employees.profile', 'users.email','users.role_name')
+               ->first();
+	    return view('account.view_account', compact('employeeData'));
 	}
 
 	//for employee area

@@ -62,38 +62,50 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort" data-sort="name">Picture</th>
-                <th scope="col" class="sort" data-sort="budget">Name</th>
-                <th scope="col" class="sort" data-sort="status">Status</th>
-                <th scope="col">Address</th>
+                <th scope="col" class="sort" data-sort="id">ID</th>
+                <th scope="col" class="sort" data-sort="profile">Picture</th>
+                <th scope="col" class="sort" data-sort="name">Name</th>
+                <th scope="col" class="sort" data-sort="address">Email</th>
                 <th scope="col" class="sort" data-sort="completion">Action</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody class="list">
-              <tr>
-                <th scope="row">
-                  <div class="media align-items-center">
-                    <a href="#" class="avatar rounded-circle mr-3">
-                      <img alt="Image placeholder" src="../assets/img/theme/bootstrap.jpg">
-                    </a>
-                  </div>
-                </th>
-                <td class="budget">
-                  Marvin M. Ramos
-                </td>
-                <td>
-                  Gender
-                </td>
-                <td>
-                  Lorem Ipsum has been the industry's standard.
-                </td>
-                <td style="width: 100%;">
-                  <a href="{{ route('employee.edit') }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
-                  <a href="{{ route('employee.view') }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
-                  <a href="" class="btn btn-danger btn-sm" style="width: 30%;">Erase</a>
-                </td>
-              </tr>
+              @foreach ($accountData as $employee)
+                <tr>
+                  <td class="id">{{ ++$i }}</td>
+                  <th scope="row" class="profile">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Profile" src="{{ URL::to($employee->profile) }}" style="width: 50px; height: 50px;">
+                      </a>
+                    </div>
+                  </th>
+                  <td class="name">{{ $employee->firstname }} {{ $employee->middlename }} {{ $employee->lastname }}</td>
+                  <td class="address">{{ $employee->email }}</td>
+                  <td class="completion">
+                    <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
+                    <a href="{{ route('account.view', $employee->id) }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
+                    <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
+                    <a class="btn btn-danger btn-sm" onclick="return confirmationDeleteEmployee();" style="width: 30%;color: #fff;">Erase</a>
+                    <script type="text/javascript">
+                      function confirmationDeleteEmployee() {
+                        swal({
+                          title: "Alert",
+                          text: "Are you sure you want to Delete the records?",
+                          icon: "warning",
+                          buttons: true,
+                          dangerMode: true,
+                        }).then(okay => {
+                          if(okay) {
+                            window.location.href = "{{ route('employee.delete', $employee->id) }}";
+                          }
+                        });
+                      }
+                    </script>
+                  </td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>
