@@ -50,20 +50,17 @@
     <div class="row">
       <div class="col-xl-4 order-xl-2">
         <div class="card card-profile">
-          <img src="../assets/img/theme/img-1-1000x600.jpg" alt="Image placeholder" class="card-img-top">
           <div class="row justify-content-center">
             <div class="col-lg-3 order-lg-2">
               <div class="card-profile-image">
                 <a href="#">
-                  <img src="../assets/img/theme/team-4.jpg" class="rounded-circle">
+                  <img src="{{ URL::to(($user->employee)->profile) }}" class="rounded-circle" style="width: 100px; height: 100px;">
                 </a>
               </div>
             </div>
           </div>
           <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
             <div class="d-flex justify-content-between">
-              <a href="#" class="btn btn-sm btn-info  mr-4 ">Connect</a>
-              <a href="#" class="btn btn-sm btn-default float-right">Message</a>
             </div>
           </div>
           <div class="card-body pt-0">
@@ -87,16 +84,21 @@
             </div>
             <div class="text-center">
               <h5 class="h3">
-                Jessica Jones<span class="font-weight-light">, 27</span>
+                {{ optional($user->employee)->firstname }} {{ optional($user->employee)->middlename }} {{ optional($user->employee)->lastname }} <span class="font-weight-light">, {{ optional($user->employee)->age }}</span>
               </h5>
               <div class="h5 font-weight-300">
-                <i class="ni location_pin mr-2"></i>Bucharest, Romania
+                <i class="ni location_pin mr-2"></i>{{ optional($user->employee)->address }}
               </div>
               <div class="h5 mt-4">
-                <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+                <i class="ni business_briefcase-24 mr-2"></i>{{ $user->role_name }} - BVCARCMDS
               </div>
               <div>
-                <i class="ni education_hat mr-2"></i>University of Computer Science
+                <i class="ni education_hat mr-2"></i><p style="font-size: 12px; text-align: left;">Hello I'm <span>{{ optional($user->employee)->firstname }} {{ optional($user->employee)->middlename }} {{ optional($user->employee)->lastname }}</span>, <span>{{ optional($user->employee)->age }}</span> yrs old of age <span>{{ optional($user->employee->gender)->gender }}</span> and i live in a wonderful city of <span>{{ optional($user->employee)->address }}</span> where i was born on <span>{{ optional($user->employee)->birthday }}</span>.</p>
+                <p style="font-size: 12px; text-align: left;">
+                  <span style="font-weight: bold;">Please, keep in touch and you can email me</span><br>
+                  <i class="fa fa-mail-bulk"></i> <span>{{ optional($user)->email }}</span><br>
+                  <i class="fa fa-phone"></i> <span>{{ optional($user->employee)->contact_number }}</span>
+                </p>
               </div>
             </div>
           </div>
@@ -110,7 +112,6 @@
                 <h3 class="mb-0">Edit profile </h3>
               </div>
               <div class="col-4 text-right">
-                <a href="#!" class="btn btn-sm btn-primary">Settings</a>
               </div>
             </div>
           </div>
@@ -122,13 +123,13 @@
                   <div class="col-lg-6">
                     <div class="form-group">
                       <label class="form-control-label" for="input-email">Email address</label>
-                      <input type="email" id="input-email" class="form-control" placeholder="jesse@example.com">
+                      <input type="email" id="input-email" class="form-control" value="{{ $user->email }}">
                     </div>
                   </div>
                   <div class="col-lg-6">
                     <div class="form-group">
                       <label class="form-control-label" for="input-password">Password</label>
-                      <input type="password" id="input-password" class="form-control" placeholder="Username">
+                      <input type="password" id="input-password" class="form-control" value="{{ $user->password }}">
                     </div>
                   </div>
                 </div>
@@ -139,19 +140,19 @@
                   <div class="col-lg-5">
                     <div class="form-group">
                       <label class="form-control-label" for="input-first-name">First name</label>
-                      <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                      <input type="text" id="input-first-name" class="form-control" value="{{ optional($user->employee)->firstname }}">
                     </div>
                   </div>
                   <div class="col-lg-5">
                     <div class="form-group">
                       <label class="form-control-label" for="input-last-name">Last name</label>
-                      <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                      <input type="text" id="input-last-name" class="form-control" value="{{ optional($user->employee)->lastname }}">
                     </div>
                   </div>
                   <div class="col-lg-2">
                     <div class="form-group">
                       <label class="form-control-label" for="input-last-name">M.I.:</label>
-                      <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                      <input type="text" id="input-last-name" class="form-control" value="{{ optional($user->employee)->middlename }}">
                     </div>
                   </div>
                 </div>
@@ -161,19 +162,19 @@
                   <div class="col-lg-5">
                     <div class="form-group">
                       <label class="form-control-label" for="input-first-name">Gender</label>
-                      <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                      <input type="text" id="input-first-name" class="form-control" value="{{ optional($user->employee->gender)->gender }}">
                     </div>
                   </div>
                   <div class="col-lg-5">
                     <div class="form-group">
                       <label class="form-control-label" for="input-last-name">Birthday</label>
-                      <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                      <input type="text" id="input-last-name" class="form-control" value="{{ optional($user->employee)->birthday }}">
                     </div>
                   </div>
                   <div class="col-lg-2">
                     <div class="form-group">
                       <label class="form-control-label" for="input-last-name">Age</label>
-                      <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                      <input type="text" id="input-last-name" class="form-control" value="{{ optional($user->employee)->age }}">
                     </div>
                   </div>
                 </div>
@@ -183,13 +184,13 @@
                   <div class="col-lg-7">
                     <div class="form-group">
                       <label class="form-control-label" for="input-first-name">Contact Number</label>
-                      <input type="text" id="input-first-name" class="form-control" placeholder="First name" value="Lucky">
+                      <input type="text" id="input-first-name" class="form-control" value="{{ optional($user->employee)->contact_number }}">
                     </div>
                   </div>
                   <div class="col-lg-5">
                     <div class="form-group">
                       <label class="form-control-label" for="input-last-name">Status</label>
-                      <input type="text" id="input-last-name" class="form-control" placeholder="Last name" value="Jesse">
+                      <input type="text" id="input-last-name" class="form-control" value="{{ optional($user->employee->status)->status }}">
                     </div>
                   </div>
                 </div>
@@ -202,29 +203,7 @@
                   <div class="col-md-12">
                     <div class="form-group">
                       <label class="form-control-label" for="input-address">Address</label>
-                      <textarea id="input-address" class="form-control" rows="4" cols="50">Address</textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr class="my-4" />
-              <h6 class="heading-small text-muted mb-4">Employee Profile</h6>
-              <div class="pl-lg-4">
-                <div class="row">
-                  <div class="col-md-9">
-                    <div class="form-group">
-                     <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-group">
-                      <button class="btn btn-success">Register</button>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-group">
-                      <a href="{{ route('employee.table') }}" class="btn btn-danger">Cancel</a>
+                      <textarea id="input-address" class="form-control" rows="4" cols="50">{{ optional($user->employee)->address }}</textarea>
                     </div>
                   </div>
                 </div>

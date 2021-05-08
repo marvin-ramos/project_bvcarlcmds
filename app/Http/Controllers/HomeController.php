@@ -27,6 +27,9 @@ class HomeController extends Controller
     }
 
     public function dashboard() {
-        return view('dashboard');
+        $user = auth()->user();
+        $user->employee;
+
+        return view('dashboard', compact('user'));
     }
 }

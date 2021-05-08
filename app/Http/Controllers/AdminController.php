@@ -20,16 +20,27 @@ use Hash;
 
 class AdminController extends Controller
 {	
+	//for admin profile here
+	public function admin_profile() {
+		$user = auth()->user();
+    	$user->employee;
+    	
+		return view('profile', compact('user'));
+	}
 	//for history table
 	public function history_table() {
+		$user = auth()->user();
+    	$user->employee;
+
 		$historyData = History::join('users', 'users.id', '=', 'histories.user_id')
                   ->join('employees', 'employees.id', '=', 'users.employee_id')
                   ->select('employees.firstname','employees.middlename','employees.lastname','employees.profile','histories.remarks','histories.created_at')
                   ->get();
 
-    	return view('history', compact('historyData'))
+    	return view('history', compact('historyData','user'))
     		 ->with('i', (request()->input('page', 1) - 1) * 15);
 	}
+
 	//for account employee area
 	public function account_table() {
 		$accountData = User::join('employees', 'employees.id', '=', 'users.employee_id')
@@ -67,28 +78,18 @@ class AdminController extends Controller
 
 	    if ($employee_account == null ) {
 
+	    	$role_name = 'Staff';
+
 			$user =  User::create([
 		        'employee_id' => $request['employee_id'],
 		        'email' 	  => $request['email'],
 		        'password' 	  => Hash::make($request['password']),
-		        'role_name'   => $request['role_name'],
+		        'role_name'   => $role_name,
 		    ]);
 
-		    $role_value = $user->role_name;
-		    $id = 0;
-
-		    if($role_value == 'Administrator') 
-		        $userRole = DB::table('roles')
-		    			  ->where('name', '=', 'Administrator')
-		    			  ->pluck('id');
-
-		    if($role_value == 'Staff') 
-		        $userRole = DB::table('roles')
-		    			  ->where('name', '=', 'Staff')
-		    			  ->pluck('id');
-
-		    $user->roles()->attach($userRole);
-		    return $user;
+		    $role = new App\Role(['role' => 2]);
+			$user->roles()->save($role);
+			return $user;
 
 			$email = $request->email; 
 			$userid = auth()->user()->id;

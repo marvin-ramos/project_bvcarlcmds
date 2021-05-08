@@ -8,7 +8,16 @@ use App\Models\History;
 use Carbon\Carbon;
 
 class StaffController extends Controller
-{
+{	
+	//for profile area only
+	public function staff_profile() {
+		$user = auth()->user();
+    	$user->employee;
+    	
+		return view('profile', compact('user'));
+	}
+
+	//for logout area
     public function logout(Request $request) {
 		$remark = 'has Logged In to the system at';
 		$id = auth()->user()->id;

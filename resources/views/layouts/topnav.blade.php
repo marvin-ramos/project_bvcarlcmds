@@ -131,19 +131,19 @@
     <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <div class="media align-items-center">
         <span class="avatar avatar-sm rounded-circle">
-          <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg">
+          <img alt="Image placeholder" src="{{ URL::to(($user->employee)->profile) }}" style="width: 40px;height: 40px;">
         </span>
         <div class="media-body  ml-2  d-none d-lg-block">
-          <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
+          <span class="mb-0 text-sm  font-weight-bold">{{ optional($user->employee)->firstname }} {{ optional($user->employee)->middlename }} {{ optional($user->employee)->lastname }}</span>
         </div>
       </div>
     </a>
     <div class="dropdown-menu  dropdown-menu-right ">
       <div class="dropdown-header noti-title">
-        <h6 class="text-overflow m-0">Welcome!</h6>
+        <h6 class="text-overflow m-0">Welcome! {{ $user->role_name }}</h6>
       </div>
       @role(['admin'])
-      <a href="#!" class="dropdown-item">
+      <a href="{{ route('admin.profile') }}" class="dropdown-item">
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
       </a>
@@ -162,7 +162,7 @@
       </a>
       @endrole
       @role(['staff'])
-      <a href="#!" class="dropdown-item">
+      <a href="{{ route('staff.profile') }}" class="dropdown-item">
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
       </a>

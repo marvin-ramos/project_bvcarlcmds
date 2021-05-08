@@ -41,7 +41,6 @@
         <div class="col-lg-6 col-7">
         </div>
         <div class="col-lg-6 col-5 text-right">
-          <a href="{{ route('employee.add') }}" class="btn btn-sm btn-success" style="width: 20%;">Add</a>
         </div>
       </div>
     </div>
