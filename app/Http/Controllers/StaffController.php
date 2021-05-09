@@ -9,6 +9,56 @@ use Carbon\Carbon;
 
 class StaffController extends Controller
 {	
+	//for administration change password
+	public function staff_change() {
+		$user = auth()->user();
+	    $user->employee;
+
+		return view('change_password', compact('user'));
+	}
+
+	//for change password
+	public function change_password(Request $request) {
+		$request->validate([
+	      'current_password' => 'required|min:5|max:20',
+	      'new_password' => 'required|min:5|max:20|alpha_dash',
+	      'new_confirm_password' => 'same:new_password',
+	    ]);
+
+	    $current_user = auth()->user();
+
+	    if(Hash::check($request->current_password, $current_user->password)) {
+
+	      $current_user->update([
+	        'password' => Hash::make($request->new_password)
+	      ]);
+
+	      $remark = 'has updated its password in the system at';
+	      $id = auth()->user()->id;
+
+	      $records = History::create([
+	          'user_id' => $id,
+	          'remarks' => $remark,
+	          'created_at' => Carbon::now()
+	      ]);
+
+	      Session::flash('alertTitle', 'Success');
+	      Session::flash('alertIcon', 'success');
+
+	      return redirect()
+	           ->route('main.dashboard')
+	           ->with('success', 'Password Successfully Updated');
+	    }else{
+
+	      Session::flash('alertTitle', 'Alert');
+	      Session::flash('alertIcon', 'warning');
+
+	      return redirect()
+	           ->route('staff.change')
+	           ->with('success', 'Current Password Does not Matched');
+	    }
+	}
+
 	//for user activities
 	public function staff_activities() {
 		$user = auth()->user();
@@ -26,7 +76,7 @@ class StaffController extends Controller
 	    return view('activities', compact('userActivities','user'))
 	         ->with('i', (request()->input('page', 1) - 1) * 15);
 	}
-	
+
 	//for profile area only
 	public function staff_profile() {
 		$user = auth()->user();

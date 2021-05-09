@@ -147,7 +147,7 @@
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
       </a>
-      <a href="#!" class="dropdown-item">
+      <a href="{{ route('admin.change') }}" class="dropdown-item">
         <i class="ni ni-settings-gear-65"></i>
         <span>Change Password</span>
       </a>
@@ -166,7 +166,7 @@
         <i class="ni ni-single-02"></i>
         <span>My profile</span>
       </a>
-      <a href="#!" class="dropdown-item">
+      <a href="{{ route('staff.change') }}" class="dropdown-item">
         <i class="ni ni-settings-gear-65"></i>
         <span>Change Password</span>
       </a>

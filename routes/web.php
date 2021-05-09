@@ -34,6 +34,9 @@ Route::post('/login/action', [LoginController::class, 'login_action'])
 Route::get('/dashboard', [HomeController::class, 'dashboard'])->middleware('check_users_login')
 ->name('main.dashboard');
 
+//for change password
+Route::post('/edit/password', [AdminController::class, 'change_password']);
+
 //for administrator route
 Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], function()
 {
@@ -78,6 +81,11 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
     //account functionality
     Route::post('/account/add/store', [AdminController::class, 'account_store']);
 
+    //for change password area
+    Route::get('/admin/change', [AdminController::class, 'admin_change'])
+         ->name('admin.change');
+
+    //for admin logout area
     Route::get('/logout', [AdminController::class, 'logout'])
          ->name('admin.logout');
 });
@@ -85,6 +93,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
 //for staff route
 Route::group(['prefix' => 'staff',  'middleware' => 'check_users_login'], function()
 {
+    //for change password area
+    Route::get('/change', [StaffController::class, 'staff_change'])
+         ->name('staff.change');
+
     //for user activities
     Route::get('/staff/activities', [StaffController::class, 'staff_activities'])
          ->name('staff.activities');
