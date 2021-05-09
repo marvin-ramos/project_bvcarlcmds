@@ -41,7 +41,6 @@
         <div class="col-lg-6 col-7">
         </div>
         <div class="col-lg-6 col-5 text-right">
-          <a href="{{ route('employee.add') }}" class="btn btn-sm btn-success" style="width: 20%;">Add</a>
         </div>
       </div>
     </div>
@@ -62,38 +61,30 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort" data-sort="name">Picture</th>
-                <th scope="col" class="sort" data-sort="budget">Name</th>
-                <th scope="col" class="sort" data-sort="status">Status</th>
-                <th scope="col">Address</th>
-                <th scope="col" class="sort" data-sort="completion">Action</th>
+                <th scope="col" class="sort" data-sort="id">ID</th>
+                <th scope="col" class="sort" data-sort="picture">Picture</th>
+                <th scope="col" class="sort" data-sort="name">Name</th>
+                <th scope="col" class="sort" data-sort="remark">Remarks</th>
+                <th scope="col" class="sort" data-sort="created">Created At</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody class="list">
-              <tr>
-                <th scope="row">
-                  <div class="media align-items-center">
-                    <a href="#" class="avatar rounded-circle mr-3">
-                      <img alt="Image placeholder" src="../assets/img/theme/bootstrap.jpg">
-                    </a>
-                  </div>
-                </th>
-                <td class="budget">
-                  Marvin M. Ramos
-                </td>
-                <td>
-                  Gender
-                </td>
-                <td>
-                  Lorem Ipsum has been the industry's standard.
-                </td>
-                <td style="width: 100%;">
-                	<a href="{{ route('employee.edit') }}" class="btn btn-primary btn-sm" style="width: 30%;">Edit</a>
-                	<a href="{{ route('employee.view') }}" class="btn btn-secondary btn-sm" style="width: 30%;">View</a>
-                	<a href="" class="btn btn-danger btn-sm" style="width: 30%;">Erase</a>
-                </td>
-              </tr>
+              @foreach ($userActivities as $employee)
+                <tr>
+                  <td class="id">{{ ++$i }}</td>
+                  <th scope="row" class="profile">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Profile" src="{{ URL::to($employee->profile) }}" style="width: 50px; height: 50px;">
+                      </a>
+                    </div>
+                  </th>
+                  <td class="name">{{ $employee->firstname }} {{ $employee->middlename }} {{ $employee->lastname }}</td>
+                  <td class="remarks">{{ $employee->remarks }}</td>
+                  <td class="created_at">{{ $employee->created_at }}</td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
         </div>

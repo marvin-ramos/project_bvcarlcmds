@@ -63,6 +63,10 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
     Route::get('/account/view/{id}', [AdminController::class, 'account_view'])
          ->name('account.view');
 
+    //for user activity area
+     Route::get('/admin/activities', [AdminController::class, 'admin_activities'])
+         ->name('admin.activities');
+             
     //for history area
     Route::get('/table/history', [AdminController::class, 'history_table'])
          ->name('history.table');
@@ -81,11 +85,15 @@ Route::group(['prefix' => 'admin',  'middleware' => 'check_users_login'], functi
 //for staff route
 Route::group(['prefix' => 'staff',  'middleware' => 'check_users_login'], function()
 {
+    //for user activities
+    Route::get('/staff/activities', [StaffController::class, 'staff_activities'])
+         ->name('staff.activities');
+
     //for dashboard area 
     Route::get('/logout', [StaffController::class, 'logout'])
          ->name('staff.logout');
 
     //for admin profile area
-    Route::get('/admin/profile', [StaffController::class, 'staff_profile'])
+    Route::get('/staff/profile', [StaffController::class, 'staff_profile'])
          ->name('staff.profile');
 });
