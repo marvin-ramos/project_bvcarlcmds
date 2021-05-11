@@ -95,6 +95,7 @@ class AdminController extends Controller
 
 		return view('profile', compact('user'));
 	}
+	
 	//for history table
 	public function history_table() {
 		$user = auth()->user();

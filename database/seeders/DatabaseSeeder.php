@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
 	        GendersTableSeeder::class,
 	        StatusesTableSeeder::class,
             RolesTableSeeder::class,
+            GatesTableSeeder::class,
 	    ]);
     }
 }

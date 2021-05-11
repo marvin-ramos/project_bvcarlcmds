@@ -7,7 +7,6 @@
         <span class="nav-link-text">Dashboard</span>
       </a>
     </li>
-    @role(['admin'])
     <li class="nav-item">
       <a class="nav-link" href="{{ route('employee.table') }}">
         <i class="ni ni-planet text-orange"></i>
@@ -26,6 +25,5 @@
         <span class="nav-link-text">History</span>
       </a>
     </li>
-    @endrole
   </ul>
 </div>
