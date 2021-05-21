@@ -1,108 +1,110 @@
 #include <SPI.h>
 #include <Ethernet.h>
 
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,0,117);
-EthernetClient client;
-
 int analogInPin1 = A0;
 int analogInPin2 = A1; 
-int LED = 9;
-int LED = 10;
-int gate_in = 0;
-int gate_out = 0;
+int LED1 = 9;
+int LED2 = 10;
 
-char server[] = "192.168.0.105"; 
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte ip[] = {192, 168, 0, 117 }; //Enter the IP of ethernet shield
+byte serv[] = {192, 168, 0, 112} ; //Enter the IPv4 address
+EthernetClient client;
+
 
 void setup() {
-  Serial.begin(9600); 
-  pinMode(LED, OUTPUT);
+  Serial.begin(9600); //setting the baud rate at 9600
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
   Ethernet.begin(mac, ip);
 }
 
 void loop() {
+  float gatein = analogRead(analogInPin1);
+  float gateout = analogRead(analogInPin2);
  
-  float gate_in = analogRead(analogInPin1);
-  float gate_out = analogRead(analogInPin2);
- 
-  // Connect to the server (your computer or web page)  
-  if (client.connect(server, 80)) {
+  if (client.connect(serv, 80)) { //Connecting at the IP address and port we saved before
+
     Serial.println("connected");
+    client.print("GET /project/data.php?"); //Connecting and Sending values to database
 
-    if(gate_in <= 50){
+    if ( gatein >= 50 ) {
 
-      //for browser
-      client.print("GET /project/data.php?");
-      client.print("gate_in="); 
-      client.print(gate_in); 
-      client.println(" HTTP/1.1"); // Part of the GET request
-      client.println("Host: 192.168.0.105"); 
-      client.println("Connection: close"); 
-      client.println(); // Empty line
-      client.println(); // Empty line
+      int gate_in = 1;
+      int gate_out = 0;
 
-      //Printing the values on the serial monitor
+      client.print("gate_in=");
+      client.print(gate_in);
+      client.print("&gate_out=");
+      client.print(gate_out);
+
       Serial.print("gate_in= ");
-      Serial.println('1');
-      digitalWrite(LED,HIGH);
+      Serial.println(gate_in);
+      digitalWrite(LED1,HIGH);
 
-    }else {
-      //for browser
-      client.print("GET /project/data.php?");
-      client.print("gate_in="); 
-      client.print(gate_in); 
-      client.println(" HTTP/1.1"); // Part of the GET request
-      client.println("Host: 192.168.0.105"); 
+      Serial.print("gate_out= ");
+      Serial.println(gate_out);
+      digitalWrite(LED2,HIGH);
+
+      client.println(" HTTP/1.1"); 
+      client.println("Host: 192.168.0.112"); 
       client.println("Connection: close"); 
-      client.println(); // Empty line
-      client.println(); // Empty line
+      client.println();
+      client.println();
 
-      //Printing the values on the serial monitor
+    } else if( gateout >= 50 ) {
+
+      int gate_in = 0;
+      int gate_out = 1;
+
+      client.print("gate_in=");
+      client.print(gate_in);
+      client.print("&gate_out=");
+      client.print(gate_out);
+
       Serial.print("gate_in= ");
-      Serial.println('0');
-      digitalWrite(LED,LOW);
+      Serial.println(gate_in);
+      digitalWrite(LED1,HIGH);
+
+      Serial.print("gate_out= ");
+      Serial.println(gate_out);
+      digitalWrite(LED2,HIGH);
+
+      client.println(" HTTP/1.1"); 
+      client.println("Host: 192.168.0.112"); 
+      client.println("Connection: close"); 
+      client.println();
+      client.println();
+
+    } else {
+    
+      int gate_in = 0;
+      int gate_out = 0;
+
+      client.print("gate_in=");
+      client.print(gate_in);
+      client.print("&gate_out=");
+      client.print(gate_out);
+      
+      Serial.print("gate_in= ");
+      Serial.println(gate_in);
+      digitalWrite(LED1, LOW);
+
+      Serial.print("gate_out= ");
+      Serial.println(gate_out);
+      digitalWrite(LED2, LOW);
+
+      client.println(" HTTP/1.1"); 
+      client.println("Host: 192.168.0.112"); 
+      client.println("Connection: close"); 
+      client.println();
+      client.println();
     }
     
-    if(gate_out <= 50){
+  } else {
 
-      //for browser
-      client.print("GET /project/data.php?");
-      client.print("gate_out="); 
-      client.print(gate_out); 
-      client.println(" HTTP/1.1"); // Part of the GET request
-      client.println("Host: 192.168.0.105"); 
-      client.println("Connection: close"); 
-      client.println(); // Empty line
-      client.println(); // Empty line
-
-      //Printing the values on the serial monitor
-      Serial.print("gate_out= ");
-      Serial.println('1');
-      digitalWrite(LED,HIGH);
-
-    }else {
-      //for browser
-      client.print("GET /project/data.php?");
-      client.print("gate_out="); 
-      client.print(gate_out); 
-      client.println(" HTTP/1.1"); // Part of the GET request
-      client.println("Host: 192.168.0.105"); 
-      client.println("Connection: close"); 
-      client.println(); // Empty line
-      client.println(); // Empty line
-
-      //Printing the values on the serial monitor
-      Serial.print("gate_out= ");
-      Serial.println('0');
-      digitalWrite(LED,LOW);
-    }
-    client.stop();
+    Serial.println("connection failed");
   }
 
-  else {
-    // If Arduino can't connect to the server (your computer or web page)
-    Serial.println("--> connection failed\n");
-  }
- 
   delay(5000);
 }

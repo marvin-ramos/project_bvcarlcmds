@@ -36,10 +36,14 @@ class HomeController extends Controller
 
         //for gate data
         $gate_in = Gate::where('gate_in','=','1')
-               ->count();
+                 ->whereDate('created_at', Carbon::today())
+                 ->count();
+
 
         $gate_out = Gate::where('gate_out','=','1')
+                  ->whereDate('created_at', Carbon::today())
                   ->count();
+       
 
         $remain_people = $gate_in - $gate_out;
         

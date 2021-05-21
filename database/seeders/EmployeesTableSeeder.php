@@ -25,7 +25,7 @@ class EmployeesTableSeeder extends Seeder
 	            'contact_number' => '09051344494',
 	            'status_id' => '1',
 	            'address' => 'General Santos City',
-	            'profile' => 'images/employee/sample.jpg'
+	            'profile' => 'images/employee/admin.png'
 	        ],[
 	            'firstname' => 'Marianne',
 	            'middlename' => 'M',
@@ -36,18 +36,7 @@ class EmployeesTableSeeder extends Seeder
 	            'contact_number' => '09261123227',
 	            'status_id' => '1',
 	            'address' => 'General Santos City',
-	            'profile' => 'images/employee/sample.jpg'
-	        ],[
-	            'firstname' => 'Wendilyn',
-	            'middlename' => 'M',
-	            'lastname' => 'Ramos',
-	            'gender_id' => '2',
-	            'age' => '18',
-	            'birthday' => '1996-04-01',
-	            'contact_number' => '09261543222',
-	            'status_id' => '1',
-	            'address' => 'General Santos City',
-	            'profile' => 'images/employee/sample.jpg'
+	            'profile' => 'images/employee/manager.jpg'
 	        ],
 		]);
     }

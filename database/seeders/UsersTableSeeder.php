@@ -25,11 +25,6 @@ class UsersTableSeeder extends Seeder
                 'email' => 'staff1@staff.com',
                 'password' => Hash::make('staff'),
                 'role_name' => 'Staff'
-            ],[
-                'employee_id' => '3',
-                'email' => 'staff2@staff.com',
-                'password' => Hash::make('staff'),
-                'role_name' => 'Staff'
             ]
         ]);
     }
