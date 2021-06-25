@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ChartsApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,8 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/chart', [ChartsApiController::class, 'index'])->name('api.chart');
+Route::get('/card', [HomeController::class, 'card'])->name('card');
 
 Route::get('/', function () {
     return view('welcome');

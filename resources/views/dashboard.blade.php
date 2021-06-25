@@ -22,6 +22,7 @@
 
 <!-- Main content -->
 <div class="main-content" id="panel">
+
   <!-- Topnav -->
   <nav class="navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom">
     <div class="container-fluid">
@@ -38,66 +39,12 @@
   <!-- Header -->
   <div class="header bg-primary pb-6">
     <div class="container-fluid">
-      <div class="header-body">
+      <div class="header-body" id="cards">
         <div class="row align-items-center py-4">
         </div>
-        <!-- Card stats -->
-        <div class="row">
-          <div class="col-xl-4 col-md-4 col-lg-4 col-xs-12">
-            <div class="card card-stats">
-              <!-- Card body -->
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Entered People</h5>
-                    <span class="h2 font-weight-bold mb-0">{{ $gate_in }}</span>
-                  </div>
-                  <div class="col-auto">
-                    <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                      <i class="ni ni-active-40"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-4 col-md-4 col-lg-4 col-xs-12">
-            <div class="card card-stats">
-              <!-- Card body -->
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Total Come Out People</h5>
-                    <span class="h2 font-weight-bold mb-0">{{ $gate_out }}</span>
-                  </div>
-                  <div class="col-auto">
-                    <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                      <i class="ni ni-chart-pie-35"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-4 col-md-4 col-lg-4 col-xs-12">
-            <div class="card card-stats">
-              <!-- Card body -->
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Remaining People</h5>
-                    <span class="h2 font-weight-bold mb-0">{{ $remain_people }}</span>
-                  </div>
-                  <div class="col-auto">
-                    <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                      <i class="ni ni-money-coins"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+        @include('layouts.card')
+
       </div>
     </div>
   </div>
@@ -137,7 +84,7 @@
           <div class="card-body">
             <!-- Chart -->
             <div class="chart">
-              <canvas id="barData" height="245"></canvas>
+              <canvas id="barData" height="245" class="TotalPeopleVisit"></canvas>
             </div>
           </div>
         </div>
@@ -156,6 +103,17 @@
 @section('scripts')
   <script src="{{ asset('assets/js/sweetalert.min.js') }}"></script>
   <script>
+    function loadlink(){
+      $('#cards').load("/card");
+      console.log('TESTING!!!!');
+    }
+
+    loadlink();
+    setInterval(function(){
+        loadlink()
+    }, 1000);
+  </script>
+  <script>
     @if(session('success'))
       swal({
         title: '{{ session('alertTitle') }}',
@@ -167,126 +125,88 @@
   </script>
   <script>
     var ctx = document.getElementById('barData').getContext('2d');
-    var chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-    labels:  {!! json_encode($chart->labels) !!} ,
-    datasets: [
-      {
-      label: 'Visitor Record',
-      backgroundColor: "rgba(71, 195, 99, 0.5)",
-      data:  {!! json_encode($chart->dataset)!!} ,
-      borderColor: "#47c363",
-          fill: true,
-      },
-    ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Chart.js Line Chart'
-        }
-        },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            callback: function(value) {
-              if (value % 1 === 0) {
-                return value;
-              }
-            }
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {!! json_encode($chart->labels) !!},
+        datasets: [
+          {
+          label: 'Total Visitors',
+          backgroundColor: "rgba(71, 195, 99, 0.5)",
+          data:  {!! json_encode($chart->dataset)!!},
+          borderColor: "#47c363",
+              fill: true,
           },
-          scaleLabel: {
-          display: false
-          }
-        }]
+        ]
       },
-      legend: {
-        labels: {
-        fontColor: '#122C4B',
-        fontFamily: "'Muli', sans-serif",
-        padding: 25,
-        boxWidth: 25,
-        fontSize: 14,
-        }
-      },
-      layout: {
-        padding: {
-          left: 10,
-          right: 10,
-          top: 0,
-          bottom: 10
+      options: {
+        scales: {
+          xAxes: [],
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
         }
       }
-    }
     });
   </script>
   <script>
     var ctx = document.getElementById('lineData').getContext('2d');
-    var chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-    labels:  {!! json_encode($chart->labels) !!} ,
-    datasets: [
-      {
-      label: 'Visitor Record',
-      backgroundColor: "rgba(71, 195, 99, 0.5)",
-      data:  {!! json_encode($chart->dataset)!!} ,
-      borderColor: "#47c363",
+    var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+          label: 'IN',
+          backgroundColor: "rgba(71, 195, 99, 0.5)",
+          data:  [],
+          borderColor: "#47c363",
+              fill: true,
+          },{
+          label: 'OUT',
+          backgroundColor: "rgba(252, 84, 75, 0.5)",
+          data:  [],
+          borderColor: "#fc544b",
           fill: true,
-      },
-    ]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Chart.js Line Chart'
-        }
-        },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            callback: function(value) {
-              if (value % 1 === 0) {
-                return value;
-              }
-            }
           },
-          scaleLabel: {
-          display: false
-          }
-        }]
+        ]
       },
-      legend: {
-        labels: {
-        fontColor: '#122C4B',
-        fontFamily: "'Muli', sans-serif",
-        padding: 25,
-        boxWidth: 25,
-        fontSize: 14,
-        }
-      },
-      layout: {
-        padding: {
-          left: 10,
-          right: 10,
-          top: 0,
-          bottom: 10
+      options: {
+        scales: {
+          xAxes: [],
+          yAxes: [{
+            ticks: {
+              beginAtZero:true
+            }
+          }]
         }
       }
-    }
     });
+    var updateChart = function() {
+      $.ajax({
+        url: "{{ route('api.chart') }}",
+        type: 'GET',
+        dataType: 'json',
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+          myChart.data.labels = data.labels;
+          myChart.data.datasets[0].data = data.data1;
+          myChart.data.datasets[1].data = data.data2;
+          myChart.update();
+        },
+        error: function(data){
+          console.log(data);
+        }
+      });
+    }
+    
+    updateChart();
+    setInterval(() => {
+      updateChart();
+    }, 1000);
   </script>
 @endsection

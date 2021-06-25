@@ -46,8 +46,8 @@ class RolesTableSeeder extends Seeder
 		$user2->attachRole($staff);//attaching role here
 
 		//third user as author
-		$user3 = User::find('3'); //get user where id is 3
-		$user3->detachRole($staff); //detach role so that we wont get duplicate entry error if we run seeder again
-		$user3->attachRole($staff); //attaching role here
+		// $user3 = User::find('3'); 
+		// $user3->detachRole($staff); 
+		// $user3->attachRole($staff); 
     }
 }

@@ -39,31 +39,78 @@ class HomeController extends Controller
                  ->whereDate('created_at', Carbon::today())
                  ->count();
 
+        $gate_out = Gate::where('gate_out','=','1')
+                  ->whereDate('created_at', Carbon::today())
+                  ->count();
+
+        $remain_people = $gate_in - $gate_out;
+        
+        $data = Gate::select([
+            \DB::raw('count(*) as visitor'),
+            \DB::raw('DATE(created_at) as date')
+        ])
+        ->where('gate_in','=','1')
+        ->groupBy('date')
+        ->pluck('visitor')
+        ->all();
+
+        $label = Gate::select([
+            \DB::raw('count(*) as visitor'),
+            \DB::raw('DATE(created_at) as date')
+        ])
+        ->groupBy('date')
+        ->pluck('visitor', 'date')
+        ->toArray();
+        
+        // Prepare the data for returning with the view
+        $chart = new Chart;
+        $chart->labels = (array_keys($label));
+        $chart->dataset = (array_values($data));
+
+        return view('dashboard', compact('user', 'chart', 'data', 'label'))
+             ->with('gate_in', $gate_in)
+             ->with('gate_out', $gate_out)
+             ->with('remain_people', $remain_people);
+    }
+
+    public function card() {
+                $user = auth()->user();
+        $user->employee;
+
+        //for gate data
+        $gate_in = Gate::where('gate_in','=','1')
+                 ->whereDate('created_at', Carbon::today())
+                 ->count();
 
         $gate_out = Gate::where('gate_out','=','1')
                   ->whereDate('created_at', Carbon::today())
                   ->count();
-       
 
         $remain_people = $gate_in - $gate_out;
         
-        $dailyData = Gate::selectRaw("COUNT(*) visitor, DATE_FORMAT(created_at, '%Y %m %e') date")
-                   ->groupBy('date')
-                   ->pluck('visitor', 'date')->all();
+        $data = Gate::select([
+            \DB::raw('count(*) as visitor'),
+            \DB::raw('DATE(created_at) as date')
+        ])
+        ->where('gate_in','=','1')
+        ->groupBy('date')
+        ->pluck('visitor')
+        ->all();
 
-        for ($i=0; $i<=count($dailyData); $i++) {
-                    $colours[] = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
-                }
+        $label = Gate::select([
+            \DB::raw('count(*) as visitor'),
+            \DB::raw('DATE(created_at) as date')
+        ])
+        ->groupBy('date')
+        ->pluck('visitor', 'date')
+        ->toArray();
+        
         // Prepare the data for returning with the view
         $chart = new Chart;
-                $chart->labels = (array_keys($dailyData));
-                $chart->dataset = (array_values($dailyData));
-                $chart->colours = $colours;
+        $chart->labels = (array_keys($label));
+        $chart->dataset = (array_values($data));
 
-        // $chart1 = new Chart;
-        // $chart1->dataset = (array_values($dailyData));
-
-        return view('dashboard', compact('user','chart'))
+        return view('layouts/card', compact('user', 'chart', 'data', 'label'))
              ->with('gate_in', $gate_in)
              ->with('gate_out', $gate_out)
              ->with('remain_people', $remain_people);
